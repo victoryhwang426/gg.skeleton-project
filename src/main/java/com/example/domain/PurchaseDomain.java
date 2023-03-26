@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.example.domain.ProductDomain.ProductInfo;
 import com.example.infra.database.Purchase;
 import lombok.Getter;
 import lombok.ToString;
@@ -20,6 +21,20 @@ public class PurchaseDomain {
       this.userId = entity.getUser().getUserId();
       this.productId = entity.getProduct().getProductId();
       this.price = entity.getPrice();
+    }
+  }
+
+  @Getter
+  @ToString
+  public static class RegisterPurchaseCommand {
+    private final Long userId;
+    private final Long productId;
+    private final Integer price;
+
+    public RegisterPurchaseCommand(long userId, ProductInfo productInfo){
+      this.userId = userId;
+      this.productId = productInfo.getProductId();
+      this.price = productInfo.getPrice();
     }
   }
 }

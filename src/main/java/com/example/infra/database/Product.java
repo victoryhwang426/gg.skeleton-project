@@ -1,5 +1,7 @@
 package com.example.infra.database;
 
+import com.example.domain.ProductDomain.ModifyProductCommand;
+import com.example.domain.ProductDomain.RegisterProductCommand;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,4 +29,14 @@ public class Product {
 
   @Column(name = "price")
   private Integer price;
+
+  public Product(RegisterProductCommand command) {
+    this.productName = command.getProductName();
+    this.price = command.getPrice();
+  }
+
+  public void updateProduct(ModifyProductCommand command){
+    this.productName = command.getProductName();
+    this.price =  command.getPrice();
+  }
 }

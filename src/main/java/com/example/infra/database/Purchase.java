@@ -1,5 +1,6 @@
 package com.example.infra.database;
 
+import com.example.domain.PurchaseDomain.RegisterPurchaseCommand;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,4 +38,14 @@ public class Purchase {
 
   @Column(name = "price")
   private Integer price;
+
+  public Purchase(RegisterPurchaseCommand command) {
+    this.user = User.builder()
+      .userId(command.getUserId())
+      .build();
+    this.product = Product.builder()
+      .productId(command.getProductId())
+      .build();
+    this.price = command.getPrice();
+  }
 }
