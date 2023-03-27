@@ -29,7 +29,7 @@ class ProductOutMapperTest extends UnitTest{
 
       assertThat(result.getProductId()).isNull();
       assertThat(result).usingRecursiveComparison()
-        .ignoringFields("productId")
+        .ignoringFields("productId", "createdAt", "modifiedAt")
         .isEqualTo(command);
     }
   }

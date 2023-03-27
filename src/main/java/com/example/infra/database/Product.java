@@ -2,6 +2,7 @@ package com.example.infra.database;
 
 import com.example.domain.ProductDomain.ModifyProductCommand;
 import com.example.domain.ProductDomain.RegisterProductCommand;
+import com.example.infra.database.common.BaseTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+public class Product extends BaseTime {
   @Id
   @Column(name = "product_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)

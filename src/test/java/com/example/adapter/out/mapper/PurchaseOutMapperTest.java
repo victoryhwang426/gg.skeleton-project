@@ -9,6 +9,7 @@ import com.example.domain.PurchaseDomain.RegisterPurchaseCommand;
 import com.example.infra.database.Product;
 import com.example.infra.database.Purchase;
 import com.example.infra.database.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class PurchaseOutMapperTest extends UnitTest {
       assertThat(result.getUser().getUserId()).isEqualTo(command.getUserId());
       assertThat(result.getProduct().getProductId()).isEqualTo(command.getProductId());
       assertThat(result).usingRecursiveComparison()
-        .ignoringFields("purchaseId", "purchaseNumber", "user", "product")
+        .ignoringFields("purchaseId", "purchaseNumber", "user", "product", "createdAt", "modifiedAt")
         .isEqualTo(command);
     }
   }

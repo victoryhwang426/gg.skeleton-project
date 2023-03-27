@@ -1,6 +1,8 @@
 package com.example.infra.database;
 
 import com.example.domain.PurchaseDomain.RegisterPurchaseCommand;
+import com.example.infra.database.common.BaseTime;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Purchase {
+public class Purchase extends BaseTime {
   @Id
   @Column(name = "purchase_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +41,8 @@ public class Purchase {
   @Column(name = "price")
   private Integer price;
 
+  private int yearOfCreatedAt;
+
   public Purchase(RegisterPurchaseCommand command) {
     this.user = User.builder()
       .userId(command.getUserId())
@@ -47,5 +51,6 @@ public class Purchase {
       .productId(command.getProductId())
       .build();
     this.price = command.getPrice();
+    this.yearOfCreatedAt = command.getYearOfCreatedAt();
   }
 }

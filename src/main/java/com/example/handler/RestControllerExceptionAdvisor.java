@@ -1,8 +1,8 @@
 package com.example.handler;
 
-import com.example.common.ApiResponse;
 import com.example.common.Status4xxException;
 import com.example.common.Status5xxException;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
@@ -26,9 +26,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Slf4j
 @RestControllerAdvice
 public class RestControllerExceptionAdvisor {
-  public final static String DEFAULT_MESSAGE = "서버오류가 발생하였습니다. 확인 부탁드립니다.";
-  public final static String BINDING_ERROR_MESSAGE = "잘못된 요청입니다.";
-
   @ExceptionHandler({
     HttpRequestMethodNotSupportedException.class,
     HttpMediaTypeNotSupportedException.class,
@@ -46,37 +43,47 @@ public class RestControllerExceptionAdvisor {
     NoHandlerFoundException.class,
     AsyncRequestTimeoutException.class
   })
-  public ResponseEntity<ApiResponse<?>> requestExceptionHandler(Exception e) {
+  public ResponseEntity<?> requestExceptionHandler(Exception e) {
     log.warn("Bad Request Exception: " + e.getMessage(), e);
-    return ResponseEntity.badRequest()
-      .body(new ApiResponse<>(ApiResponse.ProcessStatus.STOPPED_BY_VALIDATION, BINDING_ERROR_MESSAGE));
+    return ResponseEntity.ok(Map.of(
+      "code", "400",
+      "message", e.getMessage()
+    ));
   }
 
   @ExceptionHandler(Status4xxException.class)
-  public ResponseEntity<ApiResponse<?>> badRequestHandler(Status4xxException e) {
+  public ResponseEntity<?> badRequestHandler(Status4xxException e) {
     log.warn("4xx Exception: " + e.getMessage(), e);
-    return ResponseEntity.status(e.getProcessStatus().getStatusCode())
-      .body(new ApiResponse<>(e.getProcessStatus(), e.getMessage()));
+    return ResponseEntity.ok(Map.of(
+      "code", e.getProcessStatus().getStatusCode(),
+      "message", e.getMessage()
+    ));
   }
 
   @ExceptionHandler(Status5xxException.class)
-  public ResponseEntity<ApiResponse<?>> internalErrorHandler(Status5xxException e) {
+  public ResponseEntity<?> internalErrorHandler(Status5xxException e) {
     log.error("5xx Exception: " + e.getMessage(), e);
-    return ResponseEntity.status(e.getProcessStatus().getStatusCode())
-      .body(new ApiResponse<>(e.getProcessStatus(), e.getMessage()));
+    return ResponseEntity.ok(Map.of(
+      "code", e.getProcessStatus().getStatusCode(),
+      "message", e.getMessage()
+    ));
   }
 
   @ExceptionHandler(Throwable.class)
-  public ResponseEntity<ApiResponse<?>> runtimeExceptionHandler(Throwable e) {
+  public ResponseEntity<?> runtimeExceptionHandler(Throwable e) {
     log.error("UnHandled Exception: " + e.getMessage(), e);
-    return ResponseEntity.internalServerError()
-      .body(new ApiResponse<>(ApiResponse.ProcessStatus.STOPPED_BY_EXCEPTION, DEFAULT_MESSAGE));
+    return ResponseEntity.ok(Map.of(
+      "code", "500",
+      "message", e.getMessage()
+    ));
   }
 
   @ExceptionHandler(VirtualMachineError.class)
-  public ResponseEntity<ApiResponse<?>> serverErrorHandler(Error e) {
+  public ResponseEntity<?> serverErrorHandler(Error e) {
     log.error("Runtime Error: " + e.getMessage(), e);
-    return ResponseEntity.internalServerError()
-      .body(new ApiResponse<>(ApiResponse.ProcessStatus.STOPPED_BY_ERROR, DEFAULT_MESSAGE));
+    return ResponseEntity.ok(Map.of(
+      "code", "500",
+      "message", e.getMessage()
+    ));
   }
 }
