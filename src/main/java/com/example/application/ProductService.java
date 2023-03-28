@@ -1,8 +1,8 @@
-package com.example.application.port;
+package com.example.application;
 
-import com.example.application.port.in.ProductUseCases;
 import com.example.application.port.out.ReadProductStore;
 import com.example.application.port.out.WriteProductStore;
+import com.example.application.port.in.ProductUseCases;
 import com.example.common.ApiResponse.ProcessStatus;
 import com.example.common.Status4xxException;
 import com.example.domain.ProductDomain.ModifyProductCommand;

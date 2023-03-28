@@ -1,4 +1,4 @@
-package com.example.application.port;
+package com.example.application;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

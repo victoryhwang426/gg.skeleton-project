@@ -41,8 +41,10 @@ public class Purchase extends BaseTime {
   @Column(name = "price")
   private Integer price;
 
+  @Column(name = "year_of_created_at")
   private int yearOfCreatedAt;
 
+  @Column(name = "month_of_created_at")
   private int monthOfCreatedAt;
 
   public Purchase(RegisterPurchaseCommand command) {

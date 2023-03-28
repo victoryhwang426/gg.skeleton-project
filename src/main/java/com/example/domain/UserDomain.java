@@ -20,11 +20,11 @@ public class UserDomain {
 
   @Getter
   @ToString
-  public static class BuyPurchaseCommand {
+  public static class BuyProductCommand {
     private final long userId;
     private final List<Long> items;
 
-    public BuyPurchaseCommand(long userId, List<Long> items){
+    public BuyProductCommand(long userId, List<Long> items){
       this.userId = userId;
       this.items = items;
     }

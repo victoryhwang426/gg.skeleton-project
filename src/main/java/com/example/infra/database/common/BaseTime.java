@@ -1,6 +1,7 @@
 package com.example.infra.database.common;
 
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -13,8 +14,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTime {
   @CreatedDate
+  @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   @LastModifiedDate
+  @Column(name = "modified_at")
   private LocalDateTime modifiedAt;
 }
