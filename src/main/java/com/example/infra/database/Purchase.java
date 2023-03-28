@@ -43,6 +43,8 @@ public class Purchase extends BaseTime {
 
   private int yearOfCreatedAt;
 
+  private int monthOfCreatedAt;
+
   public Purchase(RegisterPurchaseCommand command) {
     this.user = User.builder()
       .userId(command.getUserId())
@@ -52,5 +54,6 @@ public class Purchase extends BaseTime {
       .build();
     this.price = command.getPrice();
     this.yearOfCreatedAt = command.getYearOfCreatedAt();
+    this.monthOfCreatedAt = command.getMonthOfCreatedAt();
   }
 }

@@ -9,7 +9,7 @@ import com.example.domain.PurchaseDomain.RegisterPurchaseCommand;
 import com.example.infra.database.Product;
 import com.example.infra.database.Purchase;
 import com.example.infra.database.User;
-import java.time.LocalDateTime;
+import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,7 @@ class PurchaseOutMapperTest extends UnitTest {
   private PurchaseOutMapper purchaseOutMapper;
   private final Product PRODUCT = Product.builder()
     .productId(1231257123L)
+    .productName(RandomString.make(20))
     .price(1231283712)
     .build();
 
@@ -55,15 +56,18 @@ class PurchaseOutMapperTest extends UnitTest {
         .purchaseNumber(1231251235L)
         .user(User.builder()
           .userId(123918273L)
+          .userName(RandomString.make(10))
           .build())
         .product(PRODUCT)
         .build();
       PurchaseInfo result = purchaseOutMapper.toPurchaseInfo(entity);
 
       assertThat(result.getUserId()).isEqualTo(entity.getUser().getUserId());
+      assertThat(result.getUserName()).isEqualTo(entity.getUser().getUserName());
       assertThat(result.getProductId()).isEqualTo(entity.getProduct().getProductId());
+      assertThat(result.getProductName()).isEqualTo(entity.getProduct().getProductName());
       assertThat(result).usingRecursiveComparison()
-        .ignoringFields("userId", "productId")
+        .ignoringFields("userId", "userName", "productId", "productName")
         .isEqualTo(entity);
     }
   }

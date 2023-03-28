@@ -1,8 +1,10 @@
 package com.example.application.port.in;
 
-import java.time.LocalDate;
+import com.example.domain.StaticDomain.ProductByYearAndMonth;
+import com.example.domain.StaticDomain.UserByYearAndMonth;
+import java.util.List;
 
 public interface SalesUseCases {
-  void getSalesRecordsByUser(int year);
-  void getSalesRecordsByProduct(int year);
+  List<UserByYearAndMonth> getSalesRecordsByUser(int year);
+  List<ProductByYearAndMonth> getSalesRecordsByProduct(int year);
 }
