@@ -43,7 +43,7 @@ public class PurchaseControllerIT {
   @Test
   @Transactional
   void getUserStatics() throws Exception {
-    int year = 2022;
+    int year = 2023;
     mockMvc.perform(get(CONTEXT + "/{year}/user", year)
         .contentType(MediaType.APPLICATION_JSON)
       )
@@ -54,7 +54,7 @@ public class PurchaseControllerIT {
   @Test
   @Transactional
   void getProductStatics() throws Exception {
-    int year = 2022;
+    int year = 2023;
     mockMvc.perform(get(CONTEXT + "/{year}/product", year)
         .contentType(MediaType.APPLICATION_JSON)
       )

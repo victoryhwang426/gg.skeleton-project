@@ -6,4 +6,4 @@ update `product` set `created_at` = current_date, `modified_at` = current_date;
 
 insert into `purchase` (`purchase_no`,`user_id`,`product_id`,`price`) select * from CSVREAD('classpath:data/purchase.csv');
 update `purchase` set `created_at` = current_date, `modified_at` = current_date;
-update `purchase` set `year_of_created_at` = 2022, `month_of_created_at` = 3;
+update `purchase` set `year_of_created_at` = 2023, `month_of_created_at` = 3;

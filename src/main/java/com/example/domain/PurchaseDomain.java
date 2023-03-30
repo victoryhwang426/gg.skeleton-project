@@ -2,6 +2,7 @@ package com.example.domain;
 
 import com.example.domain.ProductDomain.ProductInfo;
 import com.example.infra.database.Purchase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,10 +33,12 @@ public class PurchaseDomain {
       this.monthOfCreatedAt = entity.getMonthOfCreatedAt();
     }
 
+    @JsonIgnore
     public String getKeyByUserAndYearAndMonth() {
       return String.format("%s_%s_%s", userId, yearOfCreatedAt, monthOfCreatedAt);
     }
 
+    @JsonIgnore
     public String getKeyByProductAndYearAndMonth() {
       return String.format("%s_%s_%s", productId, yearOfCreatedAt, monthOfCreatedAt);
     }

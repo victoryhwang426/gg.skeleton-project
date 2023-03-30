@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.UnitTest;
+import com.example.adapter.in.dto.ProductDto.Register;
 import com.example.adapter.in.dto.PurchaseDto;
 import com.example.adapter.in.mapper.PurchaseMapper;
 import com.example.application.port.in.PurchaseUseCases;
@@ -53,6 +54,39 @@ class PurchaseControllerTest extends UnitTest {
     mockMvc = MockMvcBuilders.standaloneSetup(purchaseController)
       .setControllerAdvice(RestControllerExceptionAdvisor.class)
       .build();
+  }
+
+  @Nested
+  class RestControllerAdviceTest {
+    @Test
+    @DisplayName("Min 테스트")
+    void test1() throws Exception {
+      PurchaseDto.BuyProduct buyProduct = new PurchaseDto.BuyProduct();
+      buyProduct.setItems(List.of(1L));
+      mockMvc.perform(post(CONTEXT)
+          .content(objectMapper.writeValueAsString(buyProduct))
+          .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code", is(400), Integer.class))
+        .andExpect(jsonPath("$.message", is("사용자번호는 0보다 커야합니다.")))
+        .andDo(print());
+    }
+
+    @Test
+    @DisplayName("NotEmpty 테스트")
+    void test2() throws Exception {
+      PurchaseDto.BuyProduct buyProduct = new PurchaseDto.BuyProduct();
+      buyProduct.setUserId(1);
+      mockMvc.perform(post(CONTEXT)
+          .content(objectMapper.writeValueAsString(buyProduct))
+          .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code", is(400), Integer.class))
+        .andExpect(jsonPath("$.message", is("구매할 상품아이디가 존재하지 않습니다.")))
+        .andDo(print());
+    }
   }
 
   @Nested

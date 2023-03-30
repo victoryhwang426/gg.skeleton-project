@@ -3,13 +3,16 @@ package com.example.handler;
 import com.example.common.Status4xxException;
 import com.example.common.Status5xxException;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -45,9 +48,16 @@ public class RestControllerExceptionAdvisor {
   })
   public ResponseEntity<?> requestExceptionHandler(Exception e) {
     log.warn("Bad Request Exception: " + e.getMessage(), e);
+    String errorMessage = "잘못된 정보로 요청하였습니다.";
+    if (e instanceof MethodArgumentNotValidException) {
+      errorMessage = ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()
+        .stream()
+        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        .collect(Collectors.joining(", "));
+    }
     return ResponseEntity.ok(Map.of(
       "code", "400",
-      "message", e.getMessage()
+      "message", errorMessage
     ));
   }
 

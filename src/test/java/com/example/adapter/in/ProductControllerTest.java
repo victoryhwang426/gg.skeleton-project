@@ -57,6 +57,39 @@ class ProductControllerTest extends UnitTest {
   }
 
   @Nested
+  class RestControllerAdviceTest {
+    @Test
+    @DisplayName("NotBlank 테스트")
+    void test1() throws Exception {
+      Register register = new Register();
+      register.setPrice(102873012);
+      mockMvc.perform(post(CONTEXT)
+          .content(objectMapper.writeValueAsString(register))
+          .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code", is(400), Integer.class))
+        .andExpect(jsonPath("$.message", is("상품명이 존재하지 않습니다.")))
+        .andDo(print());
+    }
+
+    @Test
+    @DisplayName("NotNull 테스트")
+    void test2() throws Exception {
+      Register register = new Register();
+      register.setProductName("aopeijfaoisej");
+      mockMvc.perform(post(CONTEXT)
+          .content(objectMapper.writeValueAsString(register))
+          .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.code", is(400), Integer.class))
+        .andExpect(jsonPath("$.message", is("금액은 존재해야 합니다.")))
+        .andDo(print());
+    }
+  }
+
+  @Nested
   class registerProduct {
     @Captor
     private ArgumentCaptor<Register> captor;
