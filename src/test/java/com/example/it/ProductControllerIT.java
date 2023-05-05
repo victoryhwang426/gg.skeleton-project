@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.IntegrationTest;
 import com.example.adapter.in.dto.ProductDto.Modify;
 import com.example.adapter.in.dto.ProductDto.Register;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,13 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ProductControllerIT {
-  @Autowired
-  private MockMvc mockMvc;
+public class ProductControllerIT extends IntegrationTest {
   private final String CONTEXT = "/products";
-  private ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
   @Transactional

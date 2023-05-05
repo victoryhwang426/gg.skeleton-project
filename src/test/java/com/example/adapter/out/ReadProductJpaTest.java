@@ -23,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class ReadProductJpaTest extends UnitTest {
+
   @InjectMocks
   private ReadProductJpa readProductJpa;
   @Mock
@@ -32,9 +33,10 @@ class ReadProductJpaTest extends UnitTest {
 
   @Nested
   class findProductInfoByProductId {
+
     @Test
-    @DisplayName("상품의 아이디를 이용하여 상품정보를 찾는다")
-    void test1(){
+    @DisplayName("find the product by id")
+    void test1() {
       Product product = mock(Product.class);
       when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
@@ -42,7 +44,7 @@ class ReadProductJpaTest extends UnitTest {
       when(productOutMapper.toProductInfo(any())).thenReturn(domain);
 
       Optional<ProductInfo> result =
-        readProductJpa.findProductInfoByProductId(1);
+          readProductJpa.findProductInfoByProductId(1);
 
       verify(productRepository).findById(eq(1L));
       verify(productOutMapper).toProductInfo(eq(product));
@@ -54,9 +56,10 @@ class ReadProductJpaTest extends UnitTest {
 
   @Nested
   class getAllProducts {
+
     @Test
-    @DisplayName("등록된 모든 상품정보를 찾는다")
-    void test1(){
+    @DisplayName("get all stored products")
+    void test1() {
       Product product = mock(Product.class);
       when(productRepository.findAll()).thenReturn(List.of(product));
 
@@ -64,7 +67,7 @@ class ReadProductJpaTest extends UnitTest {
       when(productOutMapper.toProductInfo(any())).thenReturn(domain);
 
       List<ProductInfo> results =
-        readProductJpa.getAllProducts();
+          readProductJpa.getAllProducts();
 
       verify(productRepository).findAll();
       verify(productOutMapper, times(1)).toProductInfo(eq(product));
@@ -76,9 +79,10 @@ class ReadProductJpaTest extends UnitTest {
 
   @Nested
   class getProductsByProductIds {
+
     @Test
-    @DisplayName("요청된 아이디를 가지고 상품정보를 찾는다")
-    void test1(){
+    @DisplayName("find the product by id")
+    void test1() {
       Product product = mock(Product.class);
       when(productRepository.findAllById(any())).thenReturn(List.of(product));
 
@@ -87,7 +91,7 @@ class ReadProductJpaTest extends UnitTest {
 
       List<Long> productIds = List.of(1L);
       List<ProductInfo> results =
-        readProductJpa.getProductsByProductIds(productIds);
+          readProductJpa.getProductsByProductIds(productIds);
 
       verify(productRepository).findAllById(eq(productIds));
       verify(productOutMapper, times(1)).toProductInfo(eq(product));

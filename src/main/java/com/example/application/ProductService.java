@@ -9,6 +9,8 @@ import com.example.domain.ProductDomain.ModifyProductCommand;
 import com.example.domain.ProductDomain.ProductInfo;
 import com.example.domain.ProductDomain.RegisterProductCommand;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +29,12 @@ public class ProductService implements ProductUseCases {
   @Override
   @Transactional(readOnly = true)
   public ProductInfo getProductBy(long productId) {
-    return readProductStore.findProductInfoByProductId(productId).orElseThrow(() -> {
-      throw new Status4xxException(
-        ProcessStatus.STOPPED_BY_CONDITION,
-        "상품이 존재하지 않습니다."
-      );
-    });
+    Optional<ProductInfo> optionalProductInfo = readProductStore.findProductInfoByProductId(productId);
+    if(optionalProductInfo.isEmpty()){
+      throw new Status4xxException(ProcessStatus.STOPPED_BY_CONDITION, "The product does not exist.");
+    }
+
+    return optionalProductInfo.get();
   }
 
   @Override
@@ -44,24 +46,22 @@ public class ProductService implements ProductUseCases {
   @Override
   @Transactional
   public ProductInfo modifyProduct(ModifyProductCommand command) {
-    readProductStore.findProductInfoByProductId(command.getProductId()).orElseThrow(() -> {
-      throw new Status4xxException(
-        ProcessStatus.STOPPED_BY_CONDITION,
-        "상품이 존재하지 않습니다."
-      );
-    });
+    Optional<ProductInfo> optionalProductInfo = readProductStore.findProductInfoByProductId(command.getProductId());
+    if(optionalProductInfo.isEmpty()){
+      throw new Status4xxException(ProcessStatus.STOPPED_BY_CONDITION, "The product does not exist.");
+    }
+
     return writeProductStore.modifyProduct(command);
   }
 
   @Override
   @Transactional
   public void deleteProduct(long productId) {
-    readProductStore.findProductInfoByProductId(productId).orElseThrow(() -> {
-      throw new Status4xxException(
-        ProcessStatus.STOPPED_BY_CONDITION,
-        "상품이 존재하지 않습니다."
-      );
-    });
+    Optional<ProductInfo> optionalProductInfo = readProductStore.findProductInfoByProductId(productId);
+    if(optionalProductInfo.isEmpty()){
+      throw new Status4xxException(ProcessStatus.STOPPED_BY_CONDITION, "The product does not exist.");
+    }
+
     writeProductStore.removeProduct(productId);
   }
 }

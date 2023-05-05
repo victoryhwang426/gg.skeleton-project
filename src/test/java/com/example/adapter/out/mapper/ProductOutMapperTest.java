@@ -12,14 +12,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 
-class ProductOutMapperTest extends UnitTest{
+class ProductOutMapperTest extends UnitTest {
+
   @InjectMocks
   private ProductOutMapper productOutMapper;
 
   @Nested
   class makeProduct {
+
     @Test
-    @DisplayName("상품등록 커맨드를 이용하여 상품 신규 엔티티를 생성한다")
+    @DisplayName("create new product entity")
     void test1() {
       String productName = RandomString.make(10);
       Integer price = 123123;
@@ -29,25 +31,26 @@ class ProductOutMapperTest extends UnitTest{
 
       assertThat(result.getProductId()).isNull();
       assertThat(result).usingRecursiveComparison()
-        .ignoringFields("productId", "createdAt", "modifiedAt")
-        .isEqualTo(command);
+          .ignoringFields("productId", "createdAt", "modifiedAt")
+          .isEqualTo(command);
     }
   }
 
   @Nested
   class toProductInfo {
+
     @Test
-    @DisplayName("엔티티를 상품정보 도메인으로 변환한다")
-    void test1(){
+    @DisplayName("convert product entity to product info domain")
+    void test1() {
       Product entity = Product.builder()
-        .productId(123123L)
-        .productName(RandomString.make(19))
-        .price(1212)
-        .build();
+          .productId(123123L)
+          .productName(RandomString.make(19))
+          .price(1212)
+          .build();
       ProductInfo result = productOutMapper.toProductInfo(entity);
 
       assertThat(result).usingRecursiveComparison()
-        .isEqualTo(entity);
+          .isEqualTo(entity);
     }
   }
 }

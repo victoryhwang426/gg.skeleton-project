@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class WritePurchaseJpaTest extends UnitTest {
+
   @InjectMocks
   private WritePurchaseJpa writePurchaseJpa;
   @Mock
@@ -30,9 +31,10 @@ class WritePurchaseJpaTest extends UnitTest {
 
   @Nested
   class savePurchases {
+
     @Test
-    @DisplayName("등록커맨드를 가지고 신규엔티티를 생성 후 DB에 저장한다")
-    void test1(){
+    @DisplayName("store new purchase entity in database")
+    void test1() {
       Purchase newPurchase = mock(Purchase.class);
       when(purchaseOutMapper.makePurchase(any())).thenReturn(newPurchase);
 

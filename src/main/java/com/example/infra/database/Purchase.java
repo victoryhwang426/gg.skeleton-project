@@ -27,9 +27,6 @@ public class Purchase extends BaseTime {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long purchaseId;
 
-  @Column(name = "purchase_no")
-  private Long purchaseNumber;
-
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;

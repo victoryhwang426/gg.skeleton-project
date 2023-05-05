@@ -1,8 +1,8 @@
 product_id, product_name, price
-5000101, 종량제 100회 듣기, 4900
-5000102, 종량제 300회 듣기, 5900
-5000103, 종량제 400회 듣기, 6900
-5000301, 모바일 무제한 듣기, 7900
-5000302, 올인원 무제한 듣기, 8900
-5000501, 무제한 듣기 + 오프라인재생, 10900
-5000701, (VIP)무제한 듣기, 100
+5000101, Listening 100 Times, 4900
+5000102, Pay As You Go Listening 300 Times, 5900
+5000103, Pay As You Go Listening 400 Times, 6900
+5000301, Unlimited Listening, 7900
+5000302, All in One Unlimited Listening, 8900
+5000501, Unlimited Listening + Offline Listening, 10900
+5000701, Unlimited Listening for VIP, 100

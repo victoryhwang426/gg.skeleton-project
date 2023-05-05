@@ -20,10 +20,6 @@ public class LoggingInterceptor implements HandlerInterceptor {
     Object handler,
     Exception ex
   ) throws Exception {
-    if(!(request instanceof ContentCachingRequestWrapper)){
-      return;
-    }
-
     ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
     ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
 

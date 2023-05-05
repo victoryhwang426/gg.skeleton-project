@@ -1,7 +1,7 @@
 package com.example.adapter.out;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -24,6 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class WriteProductJpaTest extends UnitTest {
+
   @InjectMocks
   private WriteProductJpa writeProductJpa;
   @Mock
@@ -33,9 +34,10 @@ class WriteProductJpaTest extends UnitTest {
 
   @Nested
   class saveProductInfo {
+
     @Test
-    @DisplayName("등록커맨드를 가지고 신규엔티티를 생성 후 DB에 저장한다")
-    void test1(){
+    @DisplayName("store new product entity in database")
+    void test1() {
       Product newEntity = mock(Product.class);
       when(productOutMapper.makeProduct(any())).thenReturn(newEntity);
 
@@ -58,9 +60,10 @@ class WriteProductJpaTest extends UnitTest {
 
   @Nested
   class removeProduct {
+
     @Test
-    @DisplayName("요청된 아이디를 가지고 삭제 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("call the interface to delete product")
+    void test1() {
       long productId = 123123;
 
       writeProductJpa.removeProduct(productId);
@@ -71,9 +74,10 @@ class WriteProductJpaTest extends UnitTest {
 
   @Nested
   class modifyProduct {
+
     @Test
-    @DisplayName("수정커맨드를 가지고 엔티티를 찾은 후 엔티티의 수정메소드를 호출한다")
-    void test1(){
+    @DisplayName("find the product by id and call the interface to modify")
+    void test1() {
       Product entity = mock(Product.class);
       when(productRepository.getReferenceById(anyLong())).thenReturn(entity);
 
@@ -91,8 +95,8 @@ class WriteProductJpaTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("아이디를 찾지 못하면 예외를 던진다")
-    void test2(){
+    @DisplayName("throw exception if product is not found by id")
+    void test2() {
       when(productRepository.getReferenceById(anyLong())).thenThrow(new RuntimeException());
 
       ModifyProductCommand command = mock(ModifyProductCommand.class);

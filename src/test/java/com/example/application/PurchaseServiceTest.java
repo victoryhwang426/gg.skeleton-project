@@ -1,7 +1,7 @@
 package com.example.application;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -41,6 +41,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class PurchaseServiceTest extends UnitTest {
+
   @InjectMocks
   private PurchaseService purchaseService;
   @Mock
@@ -54,6 +55,7 @@ class PurchaseServiceTest extends UnitTest {
 
   @Nested
   class buyProduct {
+
     @Captor
     private ArgumentCaptor<List<RegisterPurchaseCommand>> captor;
     private final long userId = 12312127L;
@@ -61,8 +63,8 @@ class PurchaseServiceTest extends UnitTest {
     private final int price = 12312387;
 
     @Test
-    @DisplayName("구매요청한 상품이 중복이 존재하면 예외를 발생시킨다")
-    void test1(){
+    @DisplayName("throw exception if user already purchased the product")
+    void test1() {
       BuyProductCommand command = new BuyProductCommand(userId, List.of(productId, productId));
       assertThrows(Status4xxException.class, () -> {
         purchaseService.buyProduct(command);
@@ -74,8 +76,8 @@ class PurchaseServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("사용자 정보가 존재하지 않으면 예외를 발생시킨다")
-    void test0(){
+    @DisplayName("throw exception if user is not found by user id")
+    void test0() {
       when(readUserStore.findUserByUserId(anyLong())).thenReturn(Optional.empty());
 
       BuyProductCommand command = new BuyProductCommand(userId, List.of(productId));
@@ -89,7 +91,7 @@ class PurchaseServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("구매요청한 상품이 존재하지 않으면 예외를 발생시킨다")
+    @DisplayName("throw exception if product is not found by product id")
     void test2() {
       when(readUserStore.findUserByUserId(anyLong())).thenReturn(Optional.of(mock(UserInfo.class)));
 
@@ -98,14 +100,14 @@ class PurchaseServiceTest extends UnitTest {
       when(productInfo.getProductId()).thenReturn(12398172937123L);
 
       BuyProductCommand command = new BuyProductCommand(
-        userId,
-        List.of(productId)
+          userId,
+          List.of(productId)
       );
       assertThrows(
-        Status4xxException.class,
-        () -> {
-          purchaseService.buyProduct(command);
-        }
+          Status4xxException.class,
+          () -> {
+            purchaseService.buyProduct(command);
+          }
       );
 
       verify(readUserStore).findUserByUserId(eq(command.getUserId()));
@@ -114,8 +116,8 @@ class PurchaseServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("사용자 구매요청정보를 구매커맨드 도메인으로 변환후 구매등록 인터페이스를 호출한다")
-    void test3(){
+    @DisplayName("call the interface to register purchase")
+    void test3() {
       when(readUserStore.findUserByUserId(anyLong())).thenReturn(Optional.of(mock(UserInfo.class)));
 
       ProductInfo productInfo = mock(ProductInfo.class);
@@ -145,104 +147,110 @@ class PurchaseServiceTest extends UnitTest {
 
   @Nested
   class Sales {
-    private final User user1 = User.builder().userId(1L).userName("일길동").build();
-    private final User user2 = User.builder().userId(2L).userName("이길동").build();
-    private final User user3 = User.builder().userId(3L).userName("삼길동").build();
-    private final Product product1 = Product.builder().productId(1L).productName("일삼품").build();
-    private final Product product2 = Product.builder().productId(2L).productName("이삼품").build();
-    private final Product product3 = Product.builder().productId(3L).productName("삼삼품").build();
-    private final int REQUEST_YEAR = 2020;
 
+    private final User user1 = User.builder().userId(1L).userName("John").build();
+    private final User user2 = User.builder().userId(2L).userName("Victor").build();
+    private final User user3 = User.builder().userId(3L).userName("Jonas").build();
+    private final Product product1 = Product.builder().productId(1L).productName("Product 1")
+        .build();
+    private final Product product2 = Product.builder().productId(2L).productName("Product 2")
+        .build();
+    private final Product product3 = Product.builder().productId(3L).productName("Product 3")
+        .build();
+    private final int REQUEST_YEAR = 2020;
     private final PurchaseInfo p11 = new PurchaseInfo(Purchase.builder()
-      .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
-      .user(user1)
-      .product(product1)
-      .build());
+        .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
+        .user(user1)
+        .product(product1)
+        .build());
     private final PurchaseInfo p12 = new PurchaseInfo(Purchase.builder()
-      .price(2000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
-      .user(user1)
-      .product(product2)
-      .build());
+        .price(2000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
+        .user(user1)
+        .product(product2)
+        .build());
     private final PurchaseInfo p13 = new PurchaseInfo(Purchase.builder()
-      .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
-      .user(user1)
-      .product(product3)
-      .build());
+        .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
+        .user(user1)
+        .product(product3)
+        .build());
     private final PurchaseInfo p14 = new PurchaseInfo(Purchase.builder()
-      .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(3)
-      .user(user1)
-      .product(product1)
-      .build());
-    private final PurchaseInfo p21 = new PurchaseInfo( Purchase.builder()
-      .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
-      .user(user2)
-      .product(product1)
-      .build());
+        .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(3)
+        .user(user1)
+        .product(product1)
+        .build());
+    private final PurchaseInfo p21 = new PurchaseInfo(Purchase.builder()
+        .price(1000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
+        .user(user2)
+        .product(product1)
+        .build());
     private final PurchaseInfo p22 = new PurchaseInfo(Purchase.builder()
-      .price(2000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
-      .user(user2)
-      .product(product2)
-      .build());
+        .price(2000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(2)
+        .user(user2)
+        .product(product2)
+        .build());
     private final PurchaseInfo p23 = new PurchaseInfo(Purchase.builder()
-      .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(3)
-      .user(user2)
-      .product(product3)
-      .build());
+        .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(3)
+        .user(user2)
+        .product(product3)
+        .build());
 
     private final PurchaseInfo p31 = new PurchaseInfo(Purchase.builder()
-      .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
-      .user(user3)
-      .product(product3)
-      .build());
+        .price(3000).yearOfCreatedAt(REQUEST_YEAR).monthOfCreatedAt(1)
+        .user(user3)
+        .product(product3)
+        .build());
+
     @Nested
     class getSalesRecordsByUser {
+
       private void priceTest(List<UserByYearAndMonth> results,
-        long userId, int month, long expectedAmount){
+          long userId, int month, long expectedAmount) {
         long totalAmount = results.stream()
-          .filter(i -> i.getUserId().equals(userId))
-          .filter(i -> i.getYear() == REQUEST_YEAR)
-          .filter(i -> i.getMonth() == month)
-          .findFirst()
-          .get()
-          .getTotalAmount();
+            .filter(i -> i.getUserId().equals(userId))
+            .filter(i -> i.getYear() == REQUEST_YEAR)
+            .filter(i -> i.getMonth() == month)
+            .findFirst()
+            .get()
+            .getTotalAmount();
 
         assertThat(totalAmount).isEqualTo(expectedAmount);
       }
 
       @Test
-      @DisplayName("사용자의 년월 별 총합계 금액을 계산하고 해당 결과값을 리스트로 반환한다")
-      void test1(){
-        when(readPurchaseStore.getPurchasesByYear(anyInt())).thenReturn(List.of(p11, p12, p13, p14, p21, p22, p23, p31));
+      @DisplayName("Calculate the total amount for each year and month of the user's year and return the result as a list")
+      void test1() {
+        when(readPurchaseStore.getPurchasesByYear(anyInt())).thenReturn(
+            List.of(p11, p12, p13, p14, p21, p22, p23, p31));
 
         List<UserByYearAndMonth> results = purchaseService.getSalesRecordsByUser(REQUEST_YEAR);
 
         verify(readPurchaseStore).getPurchasesByYear(eq(REQUEST_YEAR));
 
         Set<Long> userIds = results.stream().map(UserByYearAndMonth::getUserId)
-          .collect(Collectors.toSet());
-        assertThat(userIds).contains(user1.getUserId(),user2.getUserId(),user3.getUserId());
+            .collect(Collectors.toSet());
+        assertThat(userIds).contains(user1.getUserId(), user2.getUserId(), user3.getUserId());
 
         Set<String> user1Result = results.stream()
-          .filter(i -> i.getUserId().equals(user1.getUserId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
-        assertThat(user1Result).contains("202001","202002","202003");
+            .filter(i -> i.getUserId().equals(user1.getUserId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
+        assertThat(user1Result).contains("202001", "202002", "202003");
         this.priceTest(results, user1.getUserId(), 1, 3000);
         this.priceTest(results, user1.getUserId(), 2, 3000);
         this.priceTest(results, user1.getUserId(), 3, 1000);
 
         Set<String> user2Result = results.stream()
-          .filter(i -> i.getUserId().equals(user2.getUserId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
-        assertThat(user2Result).contains("202002","202003");
+            .filter(i -> i.getUserId().equals(user2.getUserId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
+        assertThat(user2Result).contains("202002", "202003");
         this.priceTest(results, user2.getUserId(), 2, 3000);
         this.priceTest(results, user2.getUserId(), 3, 3000);
 
         Set<String> user3Result = results.stream()
-          .filter(i -> i.getUserId().equals(user3.getUserId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
+            .filter(i -> i.getUserId().equals(user3.getUserId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
         assertThat(user3Result).contains("202001");
         this.priceTest(results, user3.getUserId(), 1, 3000);
       }
@@ -250,65 +258,69 @@ class PurchaseServiceTest extends UnitTest {
 
     @Nested
     class getSalesRecordsByProduct {
+
       private void priceAndUserCountTest(List<ProductByYearAndMonth> results,
-        long productId, int month, long expectedAmount, int expectedUserCount){
+          long productId, int month, long expectedAmount, int expectedUserCount) {
         long totalAmount = results.stream()
-          .filter(i -> i.getProductId().equals(productId))
-          .filter(i -> i.getYear() == REQUEST_YEAR)
-          .filter(i -> i.getMonth() == month)
-          .findFirst()
-          .get()
-          .getTotalAmount();
+            .filter(i -> i.getProductId().equals(productId))
+            .filter(i -> i.getYear() == REQUEST_YEAR)
+            .filter(i -> i.getMonth() == month)
+            .findFirst()
+            .get()
+            .getTotalAmount();
         int userCount = results.stream()
-          .filter(i -> i.getProductId().equals(productId))
-          .filter(i -> i.getYear() == REQUEST_YEAR)
-          .filter(i -> i.getMonth() == month)
-          .findFirst()
-          .get()
-          .getTotalUserCount();
+            .filter(i -> i.getProductId().equals(productId))
+            .filter(i -> i.getYear() == REQUEST_YEAR)
+            .filter(i -> i.getMonth() == month)
+            .findFirst()
+            .get()
+            .getTotalUserCount();
 
         assertThat(totalAmount).isEqualTo(expectedAmount);
         assertThat(userCount).isEqualTo(expectedUserCount);
       }
 
       @Test
-      @DisplayName("상품의 년월도 별 총금액 및 구매사용자 수를 반환한다")
-      void test1(){
-        when(readPurchaseStore.getPurchasesByYear(anyInt())).thenReturn(List.of(p11, p12, p13, p14, p21, p22, p23, p31));
+      @DisplayName("Returns the total amount and number of purchasing users for a product by year and month")
+      void test1() {
+        when(readPurchaseStore.getPurchasesByYear(anyInt())).thenReturn(
+            List.of(p11, p12, p13, p14, p21, p22, p23, p31));
 
-        List<ProductByYearAndMonth> results = purchaseService.getSalesRecordsByProduct(REQUEST_YEAR);
+        List<ProductByYearAndMonth> results = purchaseService.getSalesRecordsByProduct(
+            REQUEST_YEAR);
 
         verify(readPurchaseStore).getPurchasesByYear(eq(REQUEST_YEAR));
 
         Set<Long> productIds = results.stream().map(ProductByYearAndMonth::getProductId)
-          .collect(Collectors.toSet());
-        assertThat(productIds).contains(product1.getProductId(), product2.getProductId(), product3.getProductId());
+            .collect(Collectors.toSet());
+        assertThat(productIds).contains(product1.getProductId(), product2.getProductId(),
+            product3.getProductId());
 
         Set<String> product1Result = results.stream()
-          .filter(i -> i.getProductId().equals(product1.getProductId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
-        assertThat(product1Result).contains("202001","202002","202003");
-        this.priceAndUserCountTest(results, product1.getProductId(), 1, 1000,1);
-        this.priceAndUserCountTest(results, product1.getProductId(), 2, 1000,1);
-        this.priceAndUserCountTest(results, product1.getProductId(), 3, 1000,1);
+            .filter(i -> i.getProductId().equals(product1.getProductId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
+        assertThat(product1Result).contains("202001", "202002", "202003");
+        this.priceAndUserCountTest(results, product1.getProductId(), 1, 1000, 1);
+        this.priceAndUserCountTest(results, product1.getProductId(), 2, 1000, 1);
+        this.priceAndUserCountTest(results, product1.getProductId(), 3, 1000, 1);
 
         Set<String> product2Result = results.stream()
-          .filter(i -> i.getProductId().equals(product2.getProductId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
-        assertThat(product2Result).contains("202001","202002");
-        this.priceAndUserCountTest(results, product2.getProductId(), 1, 2000,1);
-        this.priceAndUserCountTest(results, product2.getProductId(), 2, 2000,1);
+            .filter(i -> i.getProductId().equals(product2.getProductId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
+        assertThat(product2Result).contains("202001", "202002");
+        this.priceAndUserCountTest(results, product2.getProductId(), 1, 2000, 1);
+        this.priceAndUserCountTest(results, product2.getProductId(), 2, 2000, 1);
 
         Set<String> product3Result = results.stream()
-          .filter(i -> i.getProductId().equals(product3.getProductId()))
-          .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
-          .collect(Collectors.toSet());
-        assertThat(product3Result).contains("202001","202002","202003");
-        this.priceAndUserCountTest(results, product3.getProductId(), 1, 3000,1);
-        this.priceAndUserCountTest(results, product3.getProductId(), 2, 3000,1);
-        this.priceAndUserCountTest(results, product3.getProductId(), 3, 3000,1);
+            .filter(i -> i.getProductId().equals(product3.getProductId()))
+            .map(i -> i.getYear() + String.format("%02d", i.getMonth()))
+            .collect(Collectors.toSet());
+        assertThat(product3Result).contains("202001", "202002", "202003");
+        this.priceAndUserCountTest(results, product3.getProductId(), 1, 3000, 1);
+        this.priceAndUserCountTest(results, product3.getProductId(), 2, 3000, 1);
+        this.priceAndUserCountTest(results, product3.getProductId(), 3, 3000, 1);
       }
     }
   }

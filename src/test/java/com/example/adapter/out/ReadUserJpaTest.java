@@ -1,7 +1,6 @@
 package com.example.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -11,9 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.UnitTest;
 import com.example.adapter.out.mapper.UserOutMapper;
-import com.example.domain.ProductDomain.ProductInfo;
 import com.example.domain.UserDomain.UserInfo;
-import com.example.infra.database.Product;
 import com.example.infra.database.User;
 import com.example.infra.database.repository.UserRepository;
 import java.util.Optional;
@@ -24,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class ReadUserJpaTest extends UnitTest {
+
   @InjectMocks
   private ReadUserJpa readUserJpa;
   @Mock
@@ -33,9 +31,10 @@ class ReadUserJpaTest extends UnitTest {
 
   @Nested
   class findUserByUserId {
+
     @Test
-    @DisplayName("회원의 아이디를 이용하여 회원정보를 찾는다")
-    void test1(){
+    @DisplayName("find a user info by id")
+    void test1() {
       User user = mock(User.class);
       when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
@@ -43,7 +42,7 @@ class ReadUserJpaTest extends UnitTest {
       when(userOutMapper.toUserInfo(any())).thenReturn(domain);
 
       Optional<UserInfo> result =
-        readUserJpa.findUserByUserId(1);
+          readUserJpa.findUserByUserId(1);
 
       verify(userRepository).findById(eq(1L));
       verify(userOutMapper).toUserInfo(eq(user));

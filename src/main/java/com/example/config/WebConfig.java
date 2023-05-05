@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
   private final LoggingInterceptor loggingInterceptor;
 
-  // Todo. Console 은 제거가 필요
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(loggingInterceptor)

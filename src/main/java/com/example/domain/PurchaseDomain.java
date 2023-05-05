@@ -12,7 +12,6 @@ public class PurchaseDomain {
   @ToString
   public static class PurchaseInfo {
     private final Long purchaseId;
-    private final Long purchaseNumber;
     private final Long userId;
     private final String userName;
     private final Long productId;
@@ -23,7 +22,6 @@ public class PurchaseDomain {
 
     public PurchaseInfo(Purchase entity) {
       this.purchaseId = entity.getPurchaseId();
-      this.purchaseNumber = entity.getPurchaseNumber();
       this.userId = entity.getUser().getUserId();
       this.userName = entity.getUser().getUserName();
       this.productId = entity.getProduct().getProductId();

@@ -1,7 +1,6 @@
 package com.example.adapter.out;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
@@ -22,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class ReadPurchaseJpaTest extends UnitTest {
+
   @InjectMocks
   private ReadPurchaseJpa readPurchaseJpa;
   @Mock
@@ -31,9 +31,10 @@ class ReadPurchaseJpaTest extends UnitTest {
 
   @Nested
   class getPurchasesByYear {
+
     @Test
-    @DisplayName("요청받은 년도를 가지고 구매정보를 획득한다")
-    void test1(){
+    @DisplayName("find user's yearly purchase static")
+    void test1() {
       Purchase purchase = mock(Purchase.class);
       when(purchaseRepository.findByYearOfCreatedAt(anyInt())).thenReturn(List.of(purchase));
 

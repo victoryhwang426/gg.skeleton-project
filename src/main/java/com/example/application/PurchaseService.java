@@ -39,14 +39,14 @@ public class PurchaseService implements PurchaseUseCases {
     if(hasDuplicatedItem) {
       throw new Status4xxException(
         ProcessStatus.STOPPED_BY_CONDITION,
-        "중복된 상품아이디가 존재합니다."
+        "There is duplicated item."
       );
     }
 
     readUserStore.findUserByUserId(command.getUserId()).orElseThrow(() -> {
       throw new Status4xxException(
         ProcessStatus.STOPPED_BY_CONDITION,
-        "사용자가 존재하지 않습니다."
+        "The user does not exist."
       );
     });
 
@@ -59,7 +59,7 @@ public class PurchaseService implements PurchaseUseCases {
         if(productInfo == null) {
           throw new Status4xxException(
             ProcessStatus.STOPPED_BY_CONDITION,
-            "상품정보가 존재하지 않습니다."
+            "The product does not exist."
           );
         }
         return new RegisterPurchaseCommand(command.getUserId(), productInfo);

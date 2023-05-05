@@ -18,7 +18,6 @@ public class WritePurchaseJpa implements WritePurchaseStore {
   private final PurchaseRepository purchaseRepository;
   private final PurchaseOutMapper purchaseOutMapper;
 
-  // Todo. 상품명, 회원명이 null 이다
   @Override
   @Transactional
   public List<PurchaseInfo> savePurchases(List<RegisterPurchaseCommand> commands) {

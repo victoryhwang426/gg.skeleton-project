@@ -11,9 +11,9 @@ public class ProductDto {
   @Setter
   @ToString
   public static class Register {
-    @NotBlank(message = "상품명이 존재하지 않습니다.")
+    @NotBlank(message = "The product name does not exist.")
     private String productName;
-    @NotNull(message = "금액은 존재해야 합니다.")
+    @NotNull(message = "The amount must exist.")
     private Integer price;
   }
 
@@ -21,9 +21,9 @@ public class ProductDto {
   @Setter
   @ToString
   public static class Modify {
-    @NotBlank(message = "상품명이 존재하지 않습니다.")
+    @NotBlank(message = "The product name does not exist.")
     private String productName;
-    @NotNull(message = "금액은 존재해야 합니다.")
+    @NotNull(message = "The amount must exist.")
     private Integer price;
   }
 }

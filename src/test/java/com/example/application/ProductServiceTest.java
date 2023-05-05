@@ -1,7 +1,7 @@
 package com.example.application;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -28,6 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 class ProductServiceTest extends UnitTest {
+
   @InjectMocks
   private ProductService productService;
   @Mock
@@ -37,9 +38,10 @@ class ProductServiceTest extends UnitTest {
 
   @Nested
   class getAllProducts {
+
     @Test
-    @DisplayName("등록된 모든 상품을 획득하는 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("Call the interface to get all registered products")
+    void test1() {
       when(readProductStore.getAllProducts()).thenReturn(Collections.emptyList());
 
       List<ProductInfo> results = productService.getAllProducts();
@@ -52,11 +54,13 @@ class ProductServiceTest extends UnitTest {
 
   @Nested
   class getProductBy {
+
     @Test
-    @DisplayName("상품 아이디로 상품을 찾는 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("Call the interface to find a product by product ID")
+    void test1() {
       ProductInfo productInfo = mock(ProductInfo.class);
-      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.of(productInfo));
+      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(
+          Optional.of(productInfo));
 
       long productId = 123098123;
       ProductInfo result = productService.getProductBy(productId);
@@ -67,8 +71,8 @@ class ProductServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("상품정보가 존재하지 않으면 예외를 발생시킨다")
-    void test2(){
+    @DisplayName("throw exception if product is not found by id")
+    void test2() {
       when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.empty());
 
       long productId = 123098123;
@@ -82,9 +86,10 @@ class ProductServiceTest extends UnitTest {
 
   @Nested
   class registerProduct {
+
     @Test
-    @DisplayName("등록커맨드를 이용하여 상품등록 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("call the interface to register product")
+    void test1() {
       ProductInfo productInfo = mock(ProductInfo.class);
       when(writeProductStore.saveProduct(any())).thenReturn(productInfo);
 
@@ -99,11 +104,13 @@ class ProductServiceTest extends UnitTest {
 
   @Nested
   class modifyProduct {
+
     @Test
-    @DisplayName("수정커맨드를 이용하여 상품수정 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("call the interface to modify product")
+    void test1() {
       ProductInfo productInfo = mock(ProductInfo.class);
-      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.of(productInfo));
+      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(
+          Optional.of(productInfo));
 
       ProductInfo afterProductInfo = mock(ProductInfo.class);
       when(writeProductStore.modifyProduct(any())).thenReturn(afterProductInfo);
@@ -118,8 +125,8 @@ class ProductServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("상품아이디로 상품을 찾을 수 없으면 예외를 던진다")
-    void test2(){
+    @DisplayName("throw exception if product is not found by id")
+    void test2() {
       when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.empty());
 
       ModifyProductCommand command = mock(ModifyProductCommand.class);
@@ -134,11 +141,13 @@ class ProductServiceTest extends UnitTest {
 
   @Nested
   class deleteProduct {
+
     @Test
-    @DisplayName("상품아이디를 이용하여 삭제 인터페이스를 호출한다")
-    void test1(){
+    @DisplayName("call the interface to delete product")
+    void test1() {
       ProductInfo productInfo = mock(ProductInfo.class);
-      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.of(productInfo));
+      when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(
+          Optional.of(productInfo));
       doNothing().when(writeProductStore).removeProduct(anyLong());
 
       long productId = 123123;
@@ -149,8 +158,8 @@ class ProductServiceTest extends UnitTest {
     }
 
     @Test
-    @DisplayName("상품아이디로 상품을 찾을 수 없으면 예외를 던진다")
-    void test2(){
+    @DisplayName("throw exception if product is not found by id")
+    void test2() {
       when(readProductStore.findProductInfoByProductId(anyLong())).thenReturn(Optional.empty());
 
       long productId = 123123;

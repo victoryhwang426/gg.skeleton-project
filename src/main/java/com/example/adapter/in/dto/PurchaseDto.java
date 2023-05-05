@@ -12,9 +12,9 @@ public class PurchaseDto {
   @Setter
   @ToString
   public static class BuyProduct {
-    @Min(value = 1, message = "사용자번호는 0보다 커야합니다.")
+    @Min(value = 1, message = "The user number must be greater than 0.")
     private long userId;
-    @NotEmpty(message = "구매할 상품아이디가 존재하지 않습니다.")
+    @NotEmpty(message = "The product ID to purchase does not exist.")
     private List<Long> items;
   }
 }
