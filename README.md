@@ -13,7 +13,6 @@
 
 ## Project Structure
 The Idea of project structure follows `Ports and Adapters pattern`
-
 1. `Adapter.In`: The classes are responsible for handling user's request from outside of application such as WebUI, ConsoleUI, Message Consumer etc
 2. `Adapter.Out`: The classes that implements external layer such as database, restful api, message producer etc
 3. `Application`: The classes that implements use cases in `Application.Port.In`
